@@ -18,4 +18,8 @@ public interface IUserWidgetController {
     UsersWidget initWidget();
 
     List<User> getUsers();
+
+    void createOrUpdateUser(User user);
+
+    void deleteUser(User user);
 }

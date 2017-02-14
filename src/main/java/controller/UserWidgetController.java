@@ -32,4 +32,18 @@ public class UserWidgetController implements IUserWidgetController {
     public List<User> getUsers() {
         return integrationService.getUsers();
     }
+
+    @Override
+    public void createOrUpdateUser(User user) {
+        if (null != user.getId()) {
+            integrationService.updateUser(user);
+        } else {
+            integrationService.createUser(user);
+        }
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        integrationService.deleteUser(user.getId());
+    }
 }
