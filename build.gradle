@@ -27,7 +27,7 @@ repositories {
 
 
 dependencies {
-    compile('com.vaadin:vaadin-spring-boot-starter:1.2.0')
+    compile("com.vaadin:vaadin-spring-boot-starter:1.2.0")
     compile("org.springframework.boot:spring-boot-starter-jetty:1.+")
 }
 

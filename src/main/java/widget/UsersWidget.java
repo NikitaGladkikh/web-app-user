@@ -2,8 +2,7 @@ package widget;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
-import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.*;
 import controller.IUserWidgetController;
 import domain.User;
@@ -21,7 +20,7 @@ public class UsersWidget extends VerticalLayout {
 
     private IUserWidgetController controller;
     private Grid grid;
-    private BeanItemContainer<User> userBeanItemContainer;
+    private BeanContainer<String, User> beanContainer;
 
     public UsersWidget(IUserWidgetController controller) {
         this.controller = controller;
@@ -50,26 +49,31 @@ public class UsersWidget extends VerticalLayout {
     }
 
     private void initGrid() {
-        userBeanItemContainer = new BeanItemContainer<>(User.class);
+        beanContainer = new BeanContainer<>(User.class);
+        beanContainer.setBeanIdResolver(User::getId);
         grid = new Grid("Users");
-        grid.setContainerDataSource(userBeanItemContainer = new BeanItemContainer<>(User.class));
+        grid.setContainerDataSource(beanContainer);
         grid.setColumns("name", "surName");
         grid.addItemClickListener(event -> {
             if (event.isDoubleClick()) {
-                UI.getCurrent().addWindow(new UserWindow((User) ((BeanItem) event.getItem()).getBean()));
+                UI.getCurrent().addWindow(new UserWindow(beanContainer.getItem(event.getItemId()).getBean()));
             }
         });
     }
 
-    private void refresh() {
-        userBeanItemContainer.removeAllItems();
-        userBeanItemContainer.addAll(controller.getUsers());
+    public void refresh() {
+        String userId = (String) grid.getSelectedRow();
+        beanContainer.removeAllItems();
+        beanContainer.addAll(controller.getUsers());
+        if (null != userId) {
+            grid.select(userId);
+        }
     }
 
     private void deleteUser() {
-        User selectedUser = (User) grid.getSelectedRow();
-        if (null != selectedUser) {
-            controller.deleteUser(selectedUser);
+        String userId = (String) grid.getSelectedRow();
+        if (null != userId) {
+            controller.deleteUser(userId);
             refresh();
         } else {
             Notification.show("Please select user");

@@ -1,8 +1,11 @@
 package controller;
 
+import com.vaadin.ui.UI;
 import domain.User;
 import integration.IUserIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import widget.UsersWidget;
 
@@ -18,14 +21,17 @@ import java.util.List;
  * @author Mikita Hladkikh
  */
 @Controller
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserWidgetController implements IUserWidgetController {
 
     @Autowired
     private IUserIntegrationService integrationService;
+    private UsersWidget widget;
 
     @Override
     public UsersWidget initWidget() {
-        return new UsersWidget(this);
+        widget = new UsersWidget(this);
+        return widget;
     }
 
     @Override
@@ -43,7 +49,12 @@ public class UserWidgetController implements IUserWidgetController {
     }
 
     @Override
-    public void deleteUser(User user) {
-        integrationService.deleteUser(user.getId());
+    public void deleteUser(String userId) {
+        integrationService.deleteUser(userId);
+    }
+
+    @Override
+    public void refreshWidget() {
+        UI.getCurrent().access(() -> widget.refresh());
     }
 }

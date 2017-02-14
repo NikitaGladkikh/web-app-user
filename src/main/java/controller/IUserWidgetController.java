@@ -21,5 +21,7 @@ public interface IUserWidgetController {
 
     void createOrUpdateUser(User user);
 
-    void deleteUser(User user);
+    void deleteUser(String userId);
+
+    void refreshWidget();
 }

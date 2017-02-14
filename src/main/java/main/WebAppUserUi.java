@@ -24,5 +24,7 @@ public class WebAppUserUi extends UI {
     @Override
     protected void init(VaadinRequest request) {
         setContent(userWidgetController.initWidget());
+        setPollInterval(10000);
+        addPollListener(event -> userWidgetController.refreshWidget());
     }
 }
