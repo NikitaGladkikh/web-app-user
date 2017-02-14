@@ -1,6 +1,5 @@
 package controller;
 
-import com.vaadin.ui.UI;
 import domain.User;
 import integration.IUserIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +54,6 @@ public class UserWidgetController implements IUserWidgetController {
 
     @Override
     public void refreshWidget() {
-        UI.getCurrent().access(() -> widget.refresh());
+       widget.refresh();
     }
 }
