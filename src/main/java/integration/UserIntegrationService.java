@@ -30,38 +30,38 @@ import java.util.List;
 @PropertySource("classpath:config.properties")
 public class UserIntegrationService implements IUserIntegrationService {
 
-    @Value("${rest-user.url}")
-    private String restUserUrl;
-    private String restUserIdUrl;
+    @Value("${rest-user.uri}")
+    private String restUserUri;
+    private String restUserIdUri;
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
     public List<User> getUsers() {
-        User[] body = restTemplate.getForEntity(restUserUrl, User[].class).getBody();
+        User[] body = restTemplate.getForEntity(restUserUri, User[].class).getBody();
         return Arrays.asList(body);
     }
 
     @Override
     public User getUser(String id) {
-        return restTemplate.getForEntity(restUserUrl + id, User.class).getBody();
+        return restTemplate.getForEntity(restUserUri, User.class, id).getBody();
     }
 
     @Override
     public User createUser(User user) {
-        return restTemplate.postForEntity(restUserUrl, user, User.class).getBody();
+        return restTemplate.postForEntity(restUserUri, user, User.class).getBody();
     }
 
     @Override
     public User updateUser(User user) {
-        return restTemplate.exchange(restUserIdUrl, HttpMethod.PUT, new HttpEntity<>(user), User.class, user.getId())
+        return restTemplate.exchange(restUserIdUri, HttpMethod.PUT, new HttpEntity<>(user), User.class, user.getId())
                 .getBody();
     }
 
     @Override
     public void deleteUser(String id) {
-        restTemplate.delete(restUserIdUrl, id);
+        restTemplate.delete(restUserIdUri, id);
     }
 
     @Bean
@@ -71,6 +71,6 @@ public class UserIntegrationService implements IUserIntegrationService {
 
     @PostConstruct
     private void buildUserIdUrl() {
-        restUserIdUrl = UriComponentsBuilder.fromHttpUrl(restUserUrl).path("/{id}").build().toUriString();
+        restUserIdUri = UriComponentsBuilder.fromHttpUrl(restUserUri).path("/{id}").build().toUriString();
     }
 }
