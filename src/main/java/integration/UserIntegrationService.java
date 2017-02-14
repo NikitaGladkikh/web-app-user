@@ -4,8 +4,6 @@ import domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -26,8 +24,6 @@ import java.util.List;
  * @author Mikita Hladkikh
  */
 @Service
-@Configuration
-@PropertySource("classpath:config.properties")
 public class UserIntegrationService implements IUserIntegrationService {
 
     @Value("${rest-user.uri}")
