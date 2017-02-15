@@ -106,6 +106,7 @@ public class UsersWidget extends VerticalLayout {
             }
             controller.createOrUpdateUser(user);
             UsersWidget.this.refresh();
+            close();
         }
 
         private FormLayout initForm(User user) {
